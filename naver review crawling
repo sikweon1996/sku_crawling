@@ -1,0 +1,25 @@
+from selenium import webdriver
+import time
+import pandas as pd
+
+driver = webdriver.Chrome('./WebDriver/chromedriver.exe')
+search_url = 'https://pcmap.place.naver.com/place/11796387/review/visitor' # 네이버 플레이스 서울어린이대공원 접속
+driver.get(search_url
+
+for i in range(1,350):   
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")    # 스크롤 내리기
+    driver.find_element_by_xpath('//*[@id="app-root"]/div/div/div[2]/div[5]/div[4]/div[3]/div[2]/a').click()   # '더보기' 클릭
+    time.sleep(2)
+    
+dates = driver.find_elements_by_xpath("//time")
+reviews = driver.find_elements_by_xpath("//span[@class='WoYOw']") 
+
+result_dict = []
+for i in range(len(reviews)):
+    result_dict.append({
+        'REVIEW' : reviews[i].text,
+        'DATE' : dates[i].text
+    })
+    
+result_df = pd.DataFrame(result_dict)
+result_df.to_csv('test 리뷰3500.csv', encoding='utf-8-sig') 
